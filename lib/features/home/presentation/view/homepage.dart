@@ -6,8 +6,8 @@ import 'package:uber/features/home/presentation/view/widgets/bottom_shet_control
 import 'package:uber/features/home/presentation/view/widgets/map.dart';
 import 'package:uber/features/home/presentation/view/widgets/positioned_Pickup_widget.dart';
 import 'package:uber/features/home/presentation/view/widgets/positioned_destination_widget.dart';
-import 'package:uber/features/home/presentation/view_model/cubit/get_drop_off_location_cubit.dart';
-import 'package:uber/features/home/presentation/view_model/cubit/get_pick_up_location_cubit.dart';
+import 'package:uber/features/home/presentation/view_model/get_location_cubit/get_drop_off_location_cubit.dart';
+import 'package:uber/features/home/presentation/view_model/get_location_cubit/get_pick_up_location_cubit.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

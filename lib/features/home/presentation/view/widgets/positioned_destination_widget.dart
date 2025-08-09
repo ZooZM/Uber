@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uber/constants.dart';
-import 'package:uber/features/home/presentation/view_model/cubit/get_drop_off_location_cubit.dart';
+import 'package:uber/features/home/presentation/view_model/get_location_cubit/get_drop_off_location_cubit.dart';
 
 class PositionedDestinationWidget extends StatelessWidget {
   const PositionedDestinationWidget({

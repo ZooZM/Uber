@@ -7,8 +7,8 @@ import 'package:uber/constants.dart';
 import 'package:uber/core/utils/app_fun.dart';
 import 'package:uber/core/utils/location_service.dart';
 import 'package:uber/features/home/presentation/view/widgets/location_arrow.dart';
-import 'package:uber/features/home/presentation/view_model/cubit/get_drop_off_location_cubit.dart';
-import 'package:uber/features/home/presentation/view_model/cubit/get_pick_up_location_cubit.dart';
+import 'package:uber/features/home/presentation/view_model/get_location_cubit/get_drop_off_location_cubit.dart';
+import 'package:uber/features/home/presentation/view_model/get_location_cubit/get_pick_up_location_cubit.dart';
 
 class BackgroundMap extends StatefulWidget {
   final Function(LatLng center)? onCenterChanged;

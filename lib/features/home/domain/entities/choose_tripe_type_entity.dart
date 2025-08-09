@@ -1,5 +1,5 @@
 import 'package:uber/constants.dart';
-import 'package:uber/features/home/domain/entities/tripe_entity.dart';
+import 'package:uber/core/models/tripe_model.dart';
 
 class ChooseTripTypeEntity {
   final String id;
