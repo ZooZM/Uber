@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:uber/constants.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
   //http://10.0.2.2
   //http://192.168.1.5  //mobile device
   // https://ta7t-bety-anb3dfg0e2dra6hp.germanywestcentral-01.azurewebsites.net/api/v1/
-  final String _baseUrl = kBaseUrl;
+  final String _baseUrl = dotenv.env['API_BASE_URL']!;
   final Dio _dio;
 
   ApiService(this._dio);

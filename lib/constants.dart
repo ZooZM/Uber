@@ -15,3 +15,4 @@ enum VehicleType { car, scooter }
 //192.168.100.6
 const kBaseUrl = "https://ta7t-bety.vercel.app/api/v1/";
 const kBaseCategoryAssets = "assets/images/market_categories/";
+const kCurUserBox = 'kCurUserBox';
