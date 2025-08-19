@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
       final user = UserStorage.getUserData();
       if (user.role == 'user') {
         context.go(AppRouter.kUserHomeBody);
-      } else {
+      } else if (user.role == 'driver') {
         context.go(AppRouter.kDriverHomeBody);
       }
     } catch (e) {}

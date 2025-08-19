@@ -27,7 +27,7 @@ class CurUserAdapter extends TypeAdapter<CurUser> {
       nationalId: fields[7] as String,
       vehicleType: fields[8] as String?,
       online: fields[9] as bool,
-      coord: (fields[10] as List).cast<num>(),
+      coord: (fields[10] as List).cast<double>(),
     );
   }
 

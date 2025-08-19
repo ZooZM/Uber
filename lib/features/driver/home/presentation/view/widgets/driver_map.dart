@@ -1,7 +1,11 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uber/auth/data/models/user_strorge.dart';
 import 'package:uber/core/utils/app_fun.dart';
 
 import '../../../../../../constants.dart';
@@ -20,12 +24,27 @@ class _DriverMapState extends State<DriverMap> {
   late GoogleMapController _mapController;
   late LocationService _locationService;
 
+  late final icon;
   final Set<Marker> _markers = {};
   final Set<Polyline> _polylines = {};
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(26.820553, 30.802498),
     zoom: 6,
   );
+  void builMarcker() async {
+    icon = await getMarkerIcon("assets/vehicle.png", 200);
+  }
+
+  Future<BitmapDescriptor> getMarkerIcon(String path, int width) async {
+    final ByteData data = await rootBundle.load(path);
+    final ui.Codec codec = await ui.instantiateImageCodec(
+      data.buffer.asUint8List(),
+      targetWidth: width,
+    );
+    final ui.FrameInfo fi = await codec.getNextFrame();
+    final bytes = (await fi.image.toByteData(format: ui.ImageByteFormat.png))!;
+    return BitmapDescriptor.fromBytes(bytes.buffer.asUint8List());
+  }
 
   @override
   void initState() {
@@ -34,6 +53,7 @@ class _DriverMapState extends State<DriverMap> {
       zoom: 6,
     );
     _locationService = LocationService();
+    builMarcker();
     super.initState();
   }
 
@@ -54,8 +74,10 @@ class _DriverMapState extends State<DriverMap> {
           CameraPosition(target: position, zoom: 18),
         ),
       );
+      await UserStorage.updateUserData(
+        coord: [position.latitude, position.longitude],
+      );
     } catch (e) {
-      // التعامل مع LocationEnabledException و LocationPermissionException
     } finally {
       setState(() {});
     }
@@ -128,43 +150,6 @@ class _DriverMapState extends State<DriverMap> {
     );
   }
 
-  void _updateMarkers(LatLng? pickup, LatLng? dropoff) {
-    _markers.clear();
-    _polylines.clear();
-
-    if (pickup != null) {
-      _markers.add(
-        Marker(
-          markerId: const MarkerId('pickup'),
-          position: pickup,
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueAzure,
-          ),
-          infoWindow: InfoWindow(title: '🚕 Pickup'),
-        ),
-      );
-    }
-
-    if (dropoff != null) {
-      _markers.add(
-        Marker(
-          markerId: const MarkerId('dropoff'),
-          position: dropoff,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-        ),
-      );
-    }
-
-    if (pickup != null && dropoff != null) {
-      _drawRoute(pickup, dropoff);
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
   List<LatLng> polylineCoordinates = [];
   List<LatLng> animatedPolyline = [];
 
@@ -213,7 +198,7 @@ class _DriverMapState extends State<DriverMap> {
 
         Positioned(
           right: 16,
-          bottom: 250,
+          bottom: 100,
           child: LocationArrow(
             onPressed: () async {
               await _updateCurrentLocation();

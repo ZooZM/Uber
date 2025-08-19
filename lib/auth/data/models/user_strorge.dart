@@ -8,20 +8,23 @@ class UserStorage {
 
   static Future<void> init() async {
     if (_box != null) return;
+    try {
+      if (Hive.isBoxOpen(kCurUserBox)) {
+        _box = Hive.box<CurUser>(kCurUserBox);
+      } else {
+        try {
+          _box = await Hive.openBox<CurUser>(kCurUserBox);
+        } catch (e) {
+          final dir = Hive.boxExists(kCurUserBox);
+          if (await dir) {
+            await Hive.deleteBoxFromDisk(kCurUserBox);
+          }
 
-    if (Hive.isBoxOpen(kCurUserBox)) {
-      _box = Hive.box<CurUser>(kCurUserBox);
-    } else {
-      try {
-        _box = await Hive.openBox<CurUser>(kCurUserBox);
-      } catch (e) {
-        final dir = Hive.boxExists(kCurUserBox);
-        if (await dir) {
-          await Hive.deleteBoxFromDisk(kCurUserBox);
+          _box = await Hive.openBox<CurUser>(kCurUserBox);
         }
-
-        _box = await Hive.openBox<CurUser>(kCurUserBox);
       }
+    } catch (e) {
+      print("hive error" + e.toString());
     }
   }
 
@@ -35,7 +38,7 @@ class UserStorage {
     required String? role,
     required String? nationalId,
     required String? vehicleType,
-    required List<num>? coord,
+    required List<double>? coord,
     required bool? online,
   }) async {
     final user = CurUser(
@@ -52,7 +55,7 @@ class UserStorage {
       online: online ?? false,
     );
 
-    await _box?.put(kCurUserBox, user);
+    await _box!.put(kCurUserBox, user);
   }
 
   static CurUser getUserData() {
@@ -87,7 +90,7 @@ class UserStorage {
     String? nationalId,
     String? vehicleType,
     bool? isOnline,
-    List<num>? coord,
+    List<double>? coord,
   }) async {
     final user = getUserData();
     user.token = token ?? user.token;

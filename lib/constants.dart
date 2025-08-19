@@ -11,6 +11,8 @@ const kOrange = Color(0xFFf04a4a);
 
 enum VehicleType { car, scooter }
 
+enum OnlineState { online, offline, loading }
+
 //http://10.0.2.2
 //192.168.100.6
 const kBaseUrl = "https://ta7t-bety.vercel.app/api/v1/";

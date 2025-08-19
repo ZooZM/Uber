@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uber/auth/data/models/curuser.dart';
+import 'package:uber/auth/data/models/user_strorge.dart';
 import 'package:uber/auth/data/repo/auth_repo_imp.dart';
 import 'package:uber/auth/presentation/view_model/authcubit/auth_cubit.dart';
 import 'package:uber/core/utils/app_router.dart';
 import 'package:uber/core/utils/bloc_observer.dart';
 import 'package:uber/core/utils/service_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uber/features/driver/home/domain/repositories/driver_home_repo.dart';
+import 'package:uber/features/driver/home/domain/usecases/go_onilne_use_case.dart';
+import 'package:uber/features/driver/home/presentation/view_model/cubit/go_online_cubit.dart';
 import 'package:uber/features/user/home/domain/repositories/home_repository.dart';
 import 'package:uber/features/user/home/domain/usecases/confirm_tripe_use_case.dart';
 import 'package:uber/features/user/home/domain/usecases/get_drop_off_location_use_case.dart';
@@ -19,7 +25,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   await setup();
-
+  await Hive.initFlutter();
+  Hive.registerAdapter(CurUserAdapter());
+  await UserStorage.init();
   runApp(const MyApp());
 }
 
@@ -50,6 +58,10 @@ class MyApp extends StatelessWidget {
               ),
             ),
             BlocProvider(create: (context) => AuthCubit(getIt<AuthRepoImp>())),
+            BlocProvider(
+              create: (context) =>
+                  GoOnlineCubit(GoOnilneUseCase(getIt.get<DriverHomeRepo>())),
+            ),
           ],
           child: child!,
         );

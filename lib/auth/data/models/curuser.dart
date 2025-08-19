@@ -24,7 +24,7 @@ class CurUser extends HiveObject {
   @HiveField(9)
   bool online;
   @HiveField(10)
-  List<num> coord;
+  List<double> coord;
 
   CurUser({
     required this.token,
@@ -49,8 +49,8 @@ class CurUser extends HiveObject {
       photo: json['photo'] is String ? json['photo'] : '',
       phoneNumber: json['phoneNumber'] ?? '',
       role: json['role'] ?? '',
-      nationalId: json['region'] ?? '',
-      vehicleType: json['gender'] ?? '',
+      nationalId: json['nationalId'] ?? '',
+      vehicleType: json['vehicleType'] ?? '',
       online: json['online'] ?? false,
       coord:
           (json["location"]?["coordinates"] as List?)
